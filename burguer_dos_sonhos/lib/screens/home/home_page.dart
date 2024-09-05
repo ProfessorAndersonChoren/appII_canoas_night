@@ -1,8 +1,12 @@
 import 'package:burguer_dos_sonhos/screens/home/components/payment_method.dart';
+import 'package:burguer_dos_sonhos/stores/quantity_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  final quantityStore = QuantityStore();
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +14,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Burguer dos sonhos'),
       ),
-      body: Column(
+      body: ListView(
         children: [
           Image.asset(
             'assets/ic_hamburguer.jpg',
@@ -31,6 +35,41 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 PaymentMethod(),
+                const SizedBox(height: 24),
+                Text(
+                  'Quantidade',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        quantityStore.decrement();
+                      },
+                      child: Text(
+                        '-',
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                    ),
+                    Observer(builder: (_) {
+                      return Text(
+                        quantityStore.quantity,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      );
+                    }),
+                    TextButton(
+                      onPressed: () {
+                        quantityStore.increment();
+                      },
+                      child: Text(
+                        '+',
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
