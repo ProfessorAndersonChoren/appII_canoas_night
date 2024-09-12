@@ -35,7 +35,7 @@ class TasksPage extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Text(
