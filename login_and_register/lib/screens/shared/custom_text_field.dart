@@ -4,12 +4,16 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final TextInputType inputType;
   final bool isPassword;
+  final TextInputAction action;
+  final String? Function(String? value) validator;
 
   const CustomTextField({
     super.key,
     required this.label,
     required this.inputType,
+    required this.validator,
     this.isPassword = false,
+    this.action = TextInputAction.next,
   });
 
   @override
@@ -17,20 +21,17 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: TextFormField(
-        validator: (value) {
-          return null;
-        },
+        validator: validator,
         decoration: InputDecoration(
           label: Text(label),
           border: const OutlineInputBorder(),
-          filled: true,
-          fillColor: Theme.of(context).colorScheme.primary,
           labelStyle: const TextStyle(
             color: Colors.white,
           ),
         ),
         keyboardType: inputType,
         obscureText: isPassword,
+        textInputAction: action,
       ),
     );
   }
