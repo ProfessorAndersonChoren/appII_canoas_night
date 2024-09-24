@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login_and_register/model/user_model.dart';
 import 'package:login_and_register/screens/shared/custom_text_field.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -6,6 +7,8 @@ class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class RegisterPage extends StatelessWidget {
         title: const Text('Registre-se'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
@@ -28,6 +31,7 @@ class RegisterPage extends StatelessWidget {
                   }
                   return null;
                 },
+                controller: _emailController,
               ),
               CustomTextField(
                 label: 'Senha',
@@ -39,6 +43,7 @@ class RegisterPage extends StatelessWidget {
                   }
                   return null;
                 },
+                controller: _passwordController,
               ),
               CustomTextField(
                 label: 'Repita sua senha',
@@ -48,17 +53,28 @@ class RegisterPage extends StatelessWidget {
                 validator: (value) {
                   if (value == null || value.length < 8) {
                     return 'Senha inválida!!!';
+                  } else if (value != _passwordController.text) {
+                    return 'As senhas não conferem!!!';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
               FilledButton(
-                onPressed: () {},
-                child: Text('Registrar'),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    final user = UserModel(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    );
+                    await user.register();
+                    Navigator.pop(context); // Fechar a tela
+                  }
+                },
                 style: FilledButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.tertiary,
                 ),
+                child: const Text('Registrar'),
               ),
             ],
           ),
